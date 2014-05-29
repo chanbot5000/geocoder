@@ -63,15 +63,15 @@ function mineJSON(json){
 		popupContent = "<center>" + completeAddress + "<p>" + y + ", " + x + "</p></center>";
 
 		L.marker([y, x]).addTo(map).bindPopup(popupContent);
+		map.setZoom(12);
 		map.setView(new L.LatLng(y,x));
-		$("xy").append(y);
-		appendJSON(x,y);
 
-		entryCount += 1;
+		$("xy").append(y);
+		appendCSV(name, street, city, state, zip, x,y);		
 		
 		var blah = completeAddress + ", " + x + ", " + y;
 		entries[entryCount] = blah;
-		console.log(entries); 
+		 
 	}
 	catch(err){
 		$('#map').append('<div id="geocodeError">Whoops! We were unable to geocode that address, sorry about that!<p><input type="button" id="geocodeErrorDismiss" value="Dismiss"></p></div>');
@@ -80,6 +80,21 @@ function mineJSON(json){
 		});
 		//alert("Unable to geocode address: " + street + " " + city + " " + state + " " + zip);
 	}		
+}
+
+function appendCSV(name, street, city, state, zip, x, y){
+	if (entryCount == 1){
+		$('#bottomContent').append('<div id="csv"><h2>CSV</h2></div>');
+		$('#bottomContent').append('<div id="json"><h2>JSON</h2></div>');
+		$('#csv').append("ID, Street, City, State, Zip, X, Y<br />");
+		$('#json').append("Coming Soon!");
+	}
+	var csvString = entryCount + ", " + street + ", " + city + ", " + state + ", " + zip + ", " + x + ", " + y +"<br />";
+	$('#csv').append(csvString);
+	//$('#json').append(csvString);
+
+	entryCount += 1;
+	
 }
 
 function appendJSON(x,y){

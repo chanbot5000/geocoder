@@ -15,10 +15,9 @@
 		geojson['type'] = 'FeatureCollection';
 		geojson['features'] = [];
 
-		var entryCount = 0;
+		var entryCount = 1;
 		var entries = {}
-		entries['id'] = 'address';
-		console.log(entries);
+		entries['id'] = 'address';		
 
 		$(document).ready(function(){
 
@@ -26,7 +25,7 @@
 			createMap();							
 
 			$('#geocodeButton').click(function(){				
-				geocodeAddress();				
+				geocodeAddress();					
 			});
 
 			$('#jsonButton').click(function(){	
@@ -38,7 +37,12 @@
 				$('#geocodeError').remove();
 			})
 
-
+			$(document).bind('keypress',function(e){
+     			var p = e.which;
+     			if(p==13){
+         			geocodeAddress();
+    			 }
+ 			});
 		});	
 
 
@@ -47,22 +51,25 @@
 
 </head>
 	<body>	
-
-		<div id="map">
-			<!--<div id="geocodeError">Whoops! We were unable to geocode that address, sorry about that!<p><input type="button" id="geocodeErrorDismiss" value="Dismiss"></p></div> -->
-
-		</div>
-
-		<div id="header">
-		  <div id="headWrapper">
-		  	<form class="form">
-		    	<div id="input_row"></div>
-		    	<input type="button" id="geocodeButton" value="Geocode!">
-			</form>
-		   <!-- <input type="button" id="jsonButton" value="console json!"> -->
-		  </div>
-		</div>
-		<!--<div id="jsonOutput">test text</div>-->
-
+		<div id="content">
+			<div id="topContent">
+				<div id="map"></div>
+				<div id="header">
+		  			<div id="headWrapper">
+		  				<form class="form">
+		    				<div id="input_row"></div>
+		    				<input type="button" id="geocodeButton" value="Geocode!">
+						</form>		   
+		  			</div>
+				</div>	
+				<div id="bottomContent">					
+				</div>	
+				<div id="footer">
+					<a style="text-decoration:none" href="http://giscollective.org/about/" target="_blank"> <id="about">About</a> | 
+					<a style="text-decoration:none" href="http://giscollective.org" target="_blank"> <id="gisc">GISC </a>
+				</div>
+			</div>
+			
+		</div>	
 	</body>
 </html>
