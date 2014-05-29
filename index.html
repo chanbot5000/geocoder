@@ -1,0 +1,68 @@
+<html>
+<head>
+	<title>GISC Geocoder</title>
+	<link rel="stylesheet" href="style.css" />
+	<script src="script.js" type="text/javascript"></script>
+	<script src="http://code.jquery.com/jquery-latest.min.js " ></script>
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+	<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+	<script type="text/javascript">
+
+		var map;
+		var name, street, city, state, zip;	
+
+		var geojson = {};
+		geojson['type'] = 'FeatureCollection';
+		geojson['features'] = [];
+
+		var entryCount = 0;
+		var entries = {}
+		entries['id'] = 'address';
+		console.log(entries);
+
+		$(document).ready(function(){
+
+			addRow();
+			createMap();							
+
+			$('#geocodeButton').click(function(){				
+				geocodeAddress();				
+			});
+
+			$('#jsonButton').click(function(){	
+				//console.log(geojson);
+				//$('#jsonOutput').append(jsonFeatures.toString());						
+			});
+
+			$('#geocodeErrorDismiss').click(function(){
+				$('#geocodeError').remove();
+			})
+
+
+		});	
+
+
+
+	</script>
+
+</head>
+	<body>	
+
+		<div id="map">
+			<!--<div id="geocodeError">Whoops! We were unable to geocode that address, sorry about that!<p><input type="button" id="geocodeErrorDismiss" value="Dismiss"></p></div> -->
+
+		</div>
+
+		<div id="header">
+		  <div id="headWrapper">
+		  	<form class="form">
+		    	<div id="input_row"></div>
+		    	<input type="button" id="geocodeButton" value="Geocode!">
+			</form>
+		   <!-- <input type="button" id="jsonButton" value="console json!"> -->
+		  </div>
+		</div>
+		<!--<div id="jsonOutput">test text</div>-->
+
+	</body>
+</html>
