@@ -20,7 +20,7 @@ function createMap(){
 	map = L.map('map').setView([39.5,-98.35],5);
 
 	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
-	
+	L.geoJson(address).addTo(map);
 }
 
 function geocodeAddress(){
@@ -98,9 +98,9 @@ function appendCSV(name, street, city, state, zip, x, y){
 
 function appendJSON(x,y){	
 	
-	var newJSONFeature = '{"type":"Feature","geometry":{"type":"Point","coordinates":[' + x + ', ' + y + '],"properties":{"address":"'+ completeAddress + '"}}';	
+	var newJSONFeature = '{"type":"Feature","geometry":{"type":"Point","coordinates":[' + x + ', ' + y + ']},"properties":{"address":"'+ completeAddress + '"}}';	
 	geojsonBuilder = geojsonBuilder + newJSONFeature;
-	var finalJSON = geojsonBuilder + '}';
+	var finalJSON = geojsonBuilder + ']}';
 	$('#json').empty();
 	$('#json').append("<h2>JSON</h2>");
 	$('#json').append(finalJSON);
