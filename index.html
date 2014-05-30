@@ -4,16 +4,18 @@
 	<link rel="stylesheet" href="style.css" />
 	<script src="script.js" type="text/javascript"></script>
 	<script src="http://code.jquery.com/jquery-latest.min.js " ></script>
+
 	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
 	<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+
 	<script type="text/javascript">
 
 		var map;
-		var name, street, city, state, zip;	
+		var name, street, city, state, zip, x, y;	
 
-		var geojson = {};
-		geojson['type'] = 'FeatureCollection';
-		geojson['features'] = [];
+		var geojsonBuilder = '{"type":"FeatureCollection","features":';
+		//geojson['type'] = 'FeatureCollection';
+		//geojson['features'] = [];
 
 		var entryCount = 1;
 		var entries = {}
@@ -43,6 +45,23 @@
          			geocodeAddress();
     			 }
  			});
+
+ 			var z = 'asdfasdf;lakjdsf;lajsdf;lakjdsf;lakjdsf;lajdsf;';
+
+ 			$('#jsonButton').click(function(){ 	
+ 				appendJSON(x,y);
+ 				/*var codeMirror = CodeMirror(document.getElementById("csv"), {
+ 					value: geojson,
+ 					mode: "javascript",
+ 					json: true
+ 				});*/
+ 			})
+
+ 			/*
+ 			var myCodeMirror = CodeMirror(document.body, {
+ 				value: "function myScript(){return 100;)\n",
+ 				mode: "javascript"
+ 			}); */
 		});	
 
 
@@ -59,10 +78,12 @@
 		  				<form class="form">
 		    				<div id="input_row"></div>
 		    				<input type="button" id="geocodeButton" value="Geocode!">
+		    				<!-- <input type="button" id="jsonButton" value="json"> -->
 						</form>		   
 		  			</div>
 				</div>	
-				<div id="bottomContent">					
+				<div id="bottomContent">	
+					<!-- <div id="csv"><h2>CSV</h2></div>				 -->
 				</div>	
 				<div id="footer">
 					<a style="text-decoration:none" href="http://giscollective.org/about/" target="_blank"> <id="about">About</a> | 

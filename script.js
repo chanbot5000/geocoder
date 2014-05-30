@@ -13,7 +13,7 @@ function addRow(){
 			$('#input_row').append('<input type="text" id="city" value="Watertown">');
 			$('#input_row').append('<input type="text" id="state" value="WI">');
 			$('#input_row').append('<input type="text" id="zip" value="53094">');	
-			*/			
+				*/	
 }
 
 function createMap(){
@@ -55,8 +55,8 @@ function geocodeAddress(){
 function mineJSON(json){
 
 	try{
-		var x = json.result.addressMatches[0].coordinates.x;
-		var y =	json.result.addressMatches[0].coordinates.y;			
+		x = json.result.addressMatches[0].coordinates.x;
+		y =	json.result.addressMatches[0].coordinates.y;			
 
 		//console.log(x,y);
 		completeAddress = street + " " + city + " " + state + " " + zip;
@@ -87,28 +87,22 @@ function appendCSV(name, street, city, state, zip, x, y){
 		$('#bottomContent').append('<div id="csv"><h2>CSV</h2></div>');
 		$('#bottomContent').append('<div id="json"><h2>JSON</h2></div>');
 		$('#csv').append("ID, Street, City, State, Zip, X, Y<br />");
-		$('#json').append("Coming Soon!");
+		//$('#json').append("Coming Soon!");
 	}
 	var csvString = entryCount + ", " + street + ", " + city + ", " + state + ", " + zip + ", " + x + ", " + y +"<br />";
-	$('#csv').append(csvString);
-	//$('#json').append(csvString);
-
-	entryCount += 1;
+	$('#csv').append(csvString);	
 	
+	appendJSON(x,y);
+	entryCount += 1;	
 }
 
-function appendJSON(x,y){
-	var newFeature = {
-		"type": "Feature",
-		"geometry":{
-			"type": "Point",
-			"coordinates": [x,y]
-		},
-		"properties":{
-			"title": $("name").val()
-		}
-	};
-
-	geojson['features'].push(newFeature);
+function appendJSON(x,y){	
+	
+	var newJSONFeature = '{"type":"Feature","geometry":{"type":"Point","coordinates":[' + x + ', ' + y + '],"properties":{"address":"'+ completeAddress + '"}}';	
+	geojsonBuilder = geojsonBuilder + newJSONFeature;
+	var finalJSON = geojsonBuilder + '}';
+	$('#json').empty();
+	$('#json').append("<h2>JSON</h2>");
+	$('#json').append(finalJSON);
 	
 }

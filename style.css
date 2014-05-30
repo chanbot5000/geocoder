@@ -114,6 +114,7 @@ input:focus, textarea:focus{
 }
 
 #csv{
+	top: 0px;
 	background-color: #EEEFFF;
 	width: 47%;
 	font: normal 12px/100% Verdana, sans-serif;
@@ -130,12 +131,12 @@ input:focus, textarea:focus{
     -webkit-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
 }
 
-#json{
+#json{	
 	background-color: #EEEFFF;
 	width: 47%;
 	font: normal 12px/100% Verdana, sans-serif;
 	padding: 20px;
-	margin-top: 10px;
+	
 	display: inline-block;
 	margin-left: 5px;
 
