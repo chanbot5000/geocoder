@@ -20,7 +20,7 @@ function createMap(){
 	map = L.map('map').setView([39.5,-98.35],5);
 
 	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
-	L.geoJson(address).addTo(map);
+	
 }
 
 function geocodeAddress(){
@@ -77,8 +77,7 @@ function mineJSON(json){
 		$('#map').append('<div id="geocodeError">Whoops! We were unable to geocode that address, sorry about that!<p><input type="button" id="geocodeErrorDismiss" value="Dismiss"></p></div>');
 		$('#geocodeErrorDismiss').click(function(){
 			$('#geocodeError').remove();
-		});
-		//alert("Unable to geocode address: " + street + " " + city + " " + state + " " + zip);
+		});		
 	}		
 }
 
@@ -86,8 +85,7 @@ function appendCSV(name, street, city, state, zip, x, y){
 	if (entryCount == 1){
 		$('#bottomContent').append('<div id="csv"><h2>CSV</h2></div>');
 		$('#bottomContent').append('<div id="json"><h2>JSON</h2></div>');
-		$('#csv').append("ID, Street, City, State, Zip, X, Y<br />");
-		//$('#json').append("Coming Soon!");
+		$('#csv').append("ID, Street, City, State, Zip, X, Y<br />");		
 	}
 	var csvString = entryCount + ", " + street + ", " + city + ", " + state + ", " + zip + ", " + x + ", " + y +"<br />";
 	$('#csv').append(csvString);	
@@ -98,11 +96,11 @@ function appendCSV(name, street, city, state, zip, x, y){
 
 function appendJSON(x,y){	
 	
-	var newJSONFeature = '{"type":"Feature","geometry":{"type":"Point","coordinates":[' + x + ', ' + y + ']},"properties":{"address":"'+ completeAddress + '"}}';	
+	var newJSONFeature = '{"type":"Feature","geometry":{"type":"Point","coordinates":[' + x + ', ' + y + ']},"properties":{"address":"'+ completeAddress + '"}},';	
 	geojsonBuilder = geojsonBuilder + newJSONFeature;
-	var finalJSON = geojsonBuilder + ']}';
+	var finalJSON = geojsonBuilder.slice(0, -1) + ']}';
 	$('#json').empty();
-	$('#json').append("<h2>JSON</h2>");
+	$('#json').append("<h2>GEOJSON</h2>");
 	$('#json').append(finalJSON);
 	
 }
