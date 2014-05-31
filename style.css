@@ -122,6 +122,7 @@ input:focus, textarea:focus{
 	display: inline-block;
 	margin-right: 5px;
 	margin-left: 5px;
+	float: left;
 
 	-webkit-border-radius: 5px;
     -moz-border-radius: 5px; 
@@ -136,6 +137,7 @@ input:focus, textarea:focus{
 	width: 47%;
 	font: normal 12px/100% Verdana, sans-serif;
 	padding: 20px;
+	float: left;
 	
 	display: inline-block;
 	margin-left: 5px;
