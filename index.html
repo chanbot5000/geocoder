@@ -8,8 +8,6 @@
 	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
 	<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
 
-	<script src="address.js" type="text/javascript"></script>
-
 	<script type="text/javascript">
 
 		var map;
@@ -18,10 +16,9 @@
 		var csvList = ["ID, Street, City, State, Zip, X, Y<br />"];
 		var jsonList = ['{"type":"FeatureCollection","features": ['];
 		
-		var geojsonBuilder = '{"type":"FeatureCollection","features": [';
-		
 		var errorDivActive = false;
 		var undoButtonCreated = false;
+		var csvJsonDivsCreated = false;
 
 		var entryCount = 1;	
 

@@ -20,7 +20,7 @@ function createMap(){
 	map = L.map('map').setView([39.5,-98.35],5);
 
 	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
-	
+	//L.geoJson(address).addTo(map);
 }
 
 function geocodeAddress(){
@@ -37,6 +37,7 @@ function geocodeAddress(){
 
 	//example format to pass to geocoder - http://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=4600+Silver+Hill+Rd%2C+Suitland%2C+MD+20746&benchmark=9&format=json
 	var urlString = "http://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=" + plus_street + "%2C+" + plus_city + "%2C+" + plus_zip + "&benchmark=9&format=jsonp";
+	console.log(urlString);
 
 	$.ajax({
 		type: "GET",
@@ -67,7 +68,6 @@ function mineJSON(json){
 		map.setZoom(12);
 		map.setView(new L.LatLng(y,x));
 
-		console.log('before if statement');
 		if (undoButtonCreated == false){
 			$('#button_row').append('<input type="button" id="undo" class="geocodeButton" value="Undo">');
 			undoButtonCreated = true;
@@ -77,26 +77,39 @@ function mineJSON(json){
 					$('#csv').empty();
 					$('#csv').append('<h2>CSV</h2>');
 					$('#csv').append(csvList);
+
+					jsonList.pop();
+					jsonList.pop();
+					jsonList.pop();
+					jsonList.push(']}');					
+
 					entryCount -= 1;
 
 					if (entryCount == 1){
 						$('#undo').remove();
+						$('#csv').remove()
+						$('#json').remove();
+						jsonList.pop();
 						undoButtonCreated = false;
+						csvJsonDivsCreated = false;
 					}
-					
+
+					$('#json').empty();
+					$('#json').append('<h2>GEOJSON</h2>');
+					$('#json').append(jsonList);
 				}
 			})
 			
 			console.log(undoButtonCreated);
 		}
-		console.log('before appendCSV');
+		
 		appendCSV(name, street, city, state, zip, x,y);			
 	
 	}
 	catch(err){
 		$('#map').append('<div id="geocodeError">Whoops! We were unable to geocode that address, sorry about that!<p><input type="button" id="geocodeErrorDismiss" value="Dismiss"></p></div>');
 		errorDivActive = true;
-		console.log(errorDivActive);
+		
 		$('#geocodeErrorDismiss').click(function(){
 			$('#geocodeError').remove();
 			errorDivActive = false;
@@ -106,10 +119,13 @@ function mineJSON(json){
 
 function appendCSV(name, street, city, state, zip, x, y){
 
-	if (entryCount == 1){
-		$('#bottomContent').append('<div id="csv"><h2>CSV</h2></div>');
-		$('#bottomContent').append('<div id="json"><h2>JSON</h2></div>');		
+	
+	if (csvJsonDivsCreated == false){
+		$('#bottomContent').append('<div id="csv"></div>');
+		$('#bottomContent').append('<div id="json"></div>');
+		csvJsonDivsCreated = true;		
 	}
+	
 
 	$('#csv').empty();
 	$('#csv').append('<h2>CSV</h2>');
@@ -118,19 +134,29 @@ function appendCSV(name, street, city, state, zip, x, y){
 	
 	csvList.push(csvString);
 	$('#csv').append(csvList);
-	$('#json').append(csvList);
+	//$('#json').append(csvList);
+
 	
-	//appendJSON(x,y);
-	entryCount += 1;	
+	appendJSON(x,y);
+		
 }
 
 function appendJSON(x,y){	
 	
-	var newJSONFeature = '{"type":"Feature","geometry":{"type":"Point","coordinates":[' + x + ', ' + y + ']},"properties":{"address":"'+ completeAddress + '"}},';	
-	geojsonBuilder = geojsonBuilder + newJSONFeature;
-	var finalJSON = geojsonBuilder.slice(0, -1) + ']}';
+	var newJSONFeature = '{"type":"Feature","geometry":{"type":"Point","coordinates":[' + x + ', ' + y + ']},"properties":{"address":"'+ completeAddress + '"}}';
+
+	if (entryCount > 1){
+		jsonList.pop()
+		jsonList.push(',');
+	}
+
+	jsonList.push(newJSONFeature);
+
+	jsonList.push(']}');
+
 	$('#json').empty();
 	$('#json').append("<h2>GEOJSON</h2>");
-	$('#json').append(finalJSON);
-	
+	$('#json').append(jsonList);
+
+	entryCount += 1;
 }
