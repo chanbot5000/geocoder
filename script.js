@@ -67,11 +67,29 @@ function mineJSON(json){
 		map.setZoom(12);
 		map.setView(new L.LatLng(y,x));
 
+		console.log('before if statement');
+		if (undoButtonCreated == false){
+			$('#button_row').append('<input type="button" id="undo" class="geocodeButton" value="Undo">');
+			undoButtonCreated = true;
+			$('#undo').click(function(){
+				if (entryCount > 1){
+					csvList.pop()
+					$('#csv').empty();
+					$('#csv').append('<h2>CSV</h2>');
+					$('#csv').append(csvList);
+					entryCount -= 1;
 
-		if (entryCount == 1){
-			$("#button_row").append('<input type="button" id="undo" class="geocodeButton" value="Undo">');
+					if (entryCount == 1){
+						$('#undo').remove();
+						undoButtonCreated = false;
+					}
+					
+				}
+			})
+			
+			console.log(undoButtonCreated);
 		}
-
+		console.log('before appendCSV');
 		appendCSV(name, street, city, state, zip, x,y);			
 	
 	}

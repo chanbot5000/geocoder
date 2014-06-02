@@ -17,24 +17,18 @@
 
 		var csvList = ["ID, Street, City, State, Zip, X, Y<br />"];
 		var jsonList = ['{"type":"FeatureCollection","features": ['];
-		/*
-		csvList.push('hola');
-		csvList.push('mamacita','vendejo');
-		csvList.pop();
-		console.log(csvList);*/
+		
 		var geojsonBuilder = '{"type":"FeatureCollection","features": [';
 		
 		var errorDivActive = false;
+		var undoButtonCreated = false;
 
-		var entryCount = 1;
-		//var entries = {}
-		//entries['id'] = 'address';	
+		var entryCount = 1;	
 
 		$(document).ready(function(){
 
 			addRow();
 			createMap();
-			console.log(entryCount);
 
 			$('#geocodeButton').click(function(){
 				geocodeAddress();					
@@ -43,23 +37,8 @@
 			$('#geocodeErrorDismiss').click(function(){
 				$('#geocodeError').remove();
 				errorDivActive = false;
-			})
-
-			$('#undo').click(function(){
-				
-				console.log('undo clicked');
-
-				if (entryCount > 1){
-					csvList.pop()
-					$('#csv').empty();
-					$('#csv').append('<h2>CSV</h2>');
-					$('#csv').append(csvList);
-					entryCount -= 1;
-					
-				}
-				console.log(entryCount);
-			})
-
+			});
+			
 			$(document).bind('keypress',function(e){
      			var p = e.which;	
      			if(p==13) {
@@ -87,7 +66,8 @@
 		  				<form class="form">
 		    				<div id="input_row"></div>
 		    				<div id="button_row">
-		    					<input type="button" id="geocodeButton" class="geocodeButton" value="Geocode!">		
+		    					<input type="button" id="geocodeButton" class="geocodeButton" value="Geocode!">	
+		    					<!-- <input type="button" id="undo" class="geocodeButton" value="Undo">	 -->
 							</div>
 						</form>		   
 		  			</div>
