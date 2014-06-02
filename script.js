@@ -1,19 +1,19 @@
 function addRow(){
 				
-			
+			/*
 			//$('#input_row').append('<input type="text" id="name" placeholder="Name">');	
 			$('#input_row').append('<input type="text" id="street" placeholder="Street">');	
 			$('#input_row').append('<input type="text" id="city" placeholder="City">');
 			$('#input_row').append('<input type="text" id="state" placeholder="State">');
 			$('#input_row').append('<input type="text" id="zip" placeholder="Zip Code">');						
+			*/
 			
-			/*
 			//$('#input_row').append('<input type="text" id="name" value="Name">');	
 			$('#input_row').append('<input type="text" id="street" value="131 Riverlawn Ave">');	
 			$('#input_row').append('<input type="text" id="city" value="Watertown">');
 			$('#input_row').append('<input type="text" id="state" value="WI">');
 			$('#input_row').append('<input type="text" id="zip" value="53094">');	
-				*/	
+				
 }
 
 function createMap(){
@@ -48,6 +48,8 @@ function geocodeAddress(){
 		},
 		error: function(xhr, ajaxOptions, thrownError) {
 			console.log(xhr.status, thrownError);
+			console.log('error');
+
 		}
 	});
 }
@@ -58,7 +60,6 @@ function mineJSON(json){
 		x = json.result.addressMatches[0].coordinates.x;
 		y =	json.result.addressMatches[0].coordinates.y;			
 
-		//console.log(x,y);
 		completeAddress = street + " " + city + " " + state + " " + zip;
 		popupContent = "<center>" + completeAddress + "<p>" + y + ", " + x + "</p></center>";
 
@@ -66,31 +67,42 @@ function mineJSON(json){
 		map.setZoom(12);
 		map.setView(new L.LatLng(y,x));
 
-		$("xy").append(y);
-		appendCSV(name, street, city, state, zip, x,y);		
-		
-		var blah = completeAddress + ", " + x + ", " + y;
-		entries[entryCount] = blah;
-		 
+
+		if (entryCount == 1){
+			$("#button_row").append('<input type="button" id="undo" class="geocodeButton" value="Undo">');
+		}
+
+		appendCSV(name, street, city, state, zip, x,y);			
+	
 	}
 	catch(err){
 		$('#map').append('<div id="geocodeError">Whoops! We were unable to geocode that address, sorry about that!<p><input type="button" id="geocodeErrorDismiss" value="Dismiss"></p></div>');
+		errorDivActive = true;
+		console.log(errorDivActive);
 		$('#geocodeErrorDismiss').click(function(){
 			$('#geocodeError').remove();
+			errorDivActive = false;
 		});		
 	}		
 }
 
 function appendCSV(name, street, city, state, zip, x, y){
+
 	if (entryCount == 1){
 		$('#bottomContent').append('<div id="csv"><h2>CSV</h2></div>');
-		$('#bottomContent').append('<div id="json"><h2>JSON</h2></div>');
-		$('#csv').append("ID, Street, City, State, Zip, X, Y<br />");		
+		$('#bottomContent').append('<div id="json"><h2>JSON</h2></div>');		
 	}
-	var csvString = entryCount + ", " + street + ", " + city + ", " + state + ", " + zip + ", " + x + ", " + y +"<br />";
-	$('#csv').append(csvString);	
+
+	$('#csv').empty();
+	$('#csv').append('<h2>CSV</h2>');
 	
-	appendJSON(x,y);
+	csvString = entryCount + ", " + street + ", " + city + ", " + state + ", " + zip + ", " + x + ", " + y +"<br />";
+	
+	csvList.push(csvString);
+	$('#csv').append(csvList);
+	$('#json').append(csvList);
+	
+	//appendJSON(x,y);
 	entryCount += 1;	
 }
 

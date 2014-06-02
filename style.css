@@ -16,7 +16,16 @@
 	height: 88%;
 	background-color: silver;
 	position: relative;
+
+	-webkit-border-radius: 15px;
+    -moz-border-radius: 15px; 
 }
+
+/*#buttonRow{
+	margin-right: auto;
+	margin-left: auto;
+	width: 50px;
+}*/
 
 input, textarea{
 	width: 75 dpi;
@@ -40,8 +49,8 @@ input:focus, textarea:focus{
 	-webkit-box-shadow: rgba(0, 0, 0, 0.10) 0px 0px 8px; 
 }
 
-#geocodeButton{
-	width: auto;
+.geocodeButton{
+	width: 100px;
 	padding: 9px, 15px;
 	background: #b5d0d0;
 	border: 1px;
@@ -54,11 +63,11 @@ input:focus, textarea:focus{
     -moz-border-radius: 5px; 
 }
 
-#geocodeButton:hover{
+.geocodeButton:hover{
 	border-color: #000000;
 }
 
-#geocodeButton:active{
+.geocodeButton:active{
 	background: #EEEFFF;
 }
 
@@ -90,15 +99,15 @@ input:focus, textarea:focus{
 	padding: 8px;
 	padding-top: 10px;
 
-	-webkit-border-radius: 5px;
-    -moz-border-radius: 5px; 
+	-webkit-border-radius: 8px;
+    -moz-border-radius: 8px; 
 
-    box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
+    /* box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
     -moz-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
-    -webkit-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px; 
+    -webkit-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;  
 
     background: -webkit-gradient(linear, left top, left 25, from(#FFFFFF), color-stop(4%, #EEEEEE), to(#FFFFFF));
-    background: -moz-linear-gradient(top, #FFFFFF, #EEEEEE 1px, #FFFFFF 25px); 
+    background: -moz-linear-gradient(top, #FFFFFF, #EEEEEE 1px, #FFFFFF 25px);  */
 
 }
 
@@ -137,7 +146,6 @@ input:focus, textarea:focus{
 	width: 47%;
 	font: normal 12px/100% Verdana, sans-serif;
 	padding: 20px;
-	float: left;
 	
 	display: inline-block;
 	margin-left: 5px;

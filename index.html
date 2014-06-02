@@ -13,57 +13,64 @@
 	<script type="text/javascript">
 
 		var map;
-		var name, street, city, state, zip, x, y;	
+		var name, street, city, state, zip, x, y, csvString;	
 
+		var csvList = ["ID, Street, City, State, Zip, X, Y<br />"];
+		var jsonList = ['{"type":"FeatureCollection","features": ['];
+		/*
+		csvList.push('hola');
+		csvList.push('mamacita','vendejo');
+		csvList.pop();
+		console.log(csvList);*/
 		var geojsonBuilder = '{"type":"FeatureCollection","features": [';
-		//geojson['type'] = 'FeatureCollection';
-		//geojson['features'] = [];
+		
+		var errorDivActive = false;
 
 		var entryCount = 1;
-		var entries = {}
-		entries['id'] = 'address';	
+		//var entries = {}
+		//entries['id'] = 'address';	
 
 		$(document).ready(function(){
 
 			addRow();
-			createMap();							
+			createMap();
+			console.log(entryCount);
 
-			$('#geocodeButton').click(function(){				
+			$('#geocodeButton').click(function(){
 				geocodeAddress();					
-			});
-
-			$('#jsonButton').click(function(){	
-				//console.log(geojson);
-				//$('#jsonOutput').append(jsonFeatures.toString());						
 			});
 
 			$('#geocodeErrorDismiss').click(function(){
 				$('#geocodeError').remove();
+				errorDivActive = false;
+			})
+
+			$('#undo').click(function(){
+				
+				console.log('undo clicked');
+
+				if (entryCount > 1){
+					csvList.pop()
+					$('#csv').empty();
+					$('#csv').append('<h2>CSV</h2>');
+					$('#csv').append(csvList);
+					entryCount -= 1;
+					
+				}
+				console.log(entryCount);
 			})
 
 			$(document).bind('keypress',function(e){
-     			var p = e.which;
-     			if(p==13){
+     			var p = e.which;	
+     			if(p==13) {
+     			  if (errorDivActive == true){
+    			 	$('#geocodeError').remove();
+    			 	errorDivActive = false;
+    			  }else if (errorDivActive == false){
          			geocodeAddress();
-    			 }
- 			});
-
- 			var z = 'asdfasdf;lakjdsf;lajsdf;lakjdsf;lakjdsf;lajdsf;';
-
- 			$('#jsonButton').click(function(){ 	
- 				appendJSON(x,y);
- 				/*var codeMirror = CodeMirror(document.getElementById("csv"), {
- 					value: geojson,
- 					mode: "javascript",
- 					json: true
- 				});*/
- 			})
-
- 			/*
- 			var myCodeMirror = CodeMirror(document.body, {
- 				value: "function myScript(){return 100;)\n",
- 				mode: "javascript"
- 			}); */
+    			 } 
+    			}
+ 			}); 			
 		});	
 
 
@@ -79,13 +86,13 @@
 		  			<div id="headWrapper">
 		  				<form class="form">
 		    				<div id="input_row"></div>
-		    				<input type="button" id="geocodeButton" value="Geocode!">
-		    				<!-- <input type="button" id="jsonButton" value="json"> -->
+		    				<div id="button_row">
+		    					<input type="button" id="geocodeButton" class="geocodeButton" value="Geocode!">		
+							</div>
 						</form>		   
 		  			</div>
 				</div>	
 				<div id="bottomContent">	
-					<!-- <div id="csv"><h2>CSV</h2></div>				 -->
 				</div>	
 				<div id="footer">
 					<a style="text-decoration:none" href="http://giscollective.org/about/" target="_blank"> <id="about">About</a> | 
