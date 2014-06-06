@@ -1,18 +1,18 @@
 function addRow(){
 				
-			/*
+			
 			//$('#input_row').append('<input type="text" id="name" placeholder="Name">');	
 			$('#input_row').append('<input type="text" id="street" placeholder="Street">');	
 			$('#input_row').append('<input type="text" id="city" placeholder="City">');
 			$('#input_row').append('<input type="text" id="state" placeholder="State">');
 			$('#input_row').append('<input type="text" id="zip" placeholder="Zip Code">');						
-			*/
 			
+			/*
 			//$('#input_row').append('<input type="text" id="name" value="Name">');	
 			$('#input_row').append('<input type="text" id="street" value="131 Riverlawn Ave">');	
 			$('#input_row').append('<input type="text" id="city" value="Watertown">');
 			$('#input_row').append('<input type="text" id="state" value="WI">');
-			$('#input_row').append('<input type="text" id="zip" value="53094">');	
+			$('#input_row').append('<input type="text" id="zip" value="53094">');	*/
 /*
 			$('#input_row').append('<input type="text" id="street" value="100 N Garfield Ave">');	
 			$('#input_row').append('<input type="text" id="city" value="Pasadena">');
@@ -76,8 +76,8 @@ function mineJSON(json){
 		markerList.push(marker);	
 		marker.addTo(map).bindPopup(popupContent);
 
-		map.setZoom(12);
-		map.setView(new L.LatLng(y,x));
+		//map.setZoom(12);
+		map.setView(new L.LatLng(y,x), 12);
 
 		if (undoButtonCreated == false){
 			$('#button_row').append('<input type="button" id="undo" class="geocodeButton" value="Undo">');
@@ -85,7 +85,8 @@ function mineJSON(json){
 			$('#undo').click(function(){
 				
 				map.removeLayer(markerList[markerList.length - 1]);
-				markerList.pop();
+				markerList.pop();				
+				
 
 				if (entryCount > 1){					
 
@@ -109,6 +110,11 @@ function mineJSON(json){
 						undoButtonCreated = false;
 						csvJsonDivsCreated = false;
 
+						map.setView([39.5,-98.35],5);
+
+					}else{
+
+						map.setView(markerList[markerList.length -1].getLatLng());
 					}
 
 					$('#json').empty();
