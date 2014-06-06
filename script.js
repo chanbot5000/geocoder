@@ -13,6 +13,11 @@ function addRow(){
 			$('#input_row').append('<input type="text" id="city" value="Watertown">');
 			$('#input_row').append('<input type="text" id="state" value="WI">');
 			$('#input_row').append('<input type="text" id="zip" value="53094">');	
+/*
+			$('#input_row').append('<input type="text" id="street" value="100 N Garfield Ave">');	
+			$('#input_row').append('<input type="text" id="city" value="Pasadena">');
+			$('#input_row').append('<input type="text" id="state" value="CA">');
+			$('#input_row').append('<input type="text" id="zip" value="91109">');*/
 				
 }
 
@@ -33,19 +38,19 @@ function geocodeAddress(){
 	var plus_street= street.replace(/ /gi,"+");
     var plus_city = city.replace(/ /gi, "+");
     var plus_state = state.replace(/ /gi,"+");
-    var plus_zip = zip.replace(/ /gi, "+");		
+    var plus_zip = zip.replace(/ /gi, "+");	    	
 
 	//example format to pass to geocoder - http://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=4600+Silver+Hill+Rd%2C+Suitland%2C+MD+20746&benchmark=9&format=json
-	var urlString = "http://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=" + plus_street + "%2C+" + plus_city + "%2C+" + plus_zip + "&benchmark=9&format=jsonp";
+	var urlString = "http://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=" + plus_street + "%2C+" + plus_city + "%2C+" + plus_state + "+" + plus_zip + "&benchmark=9&format=jsonp";		
 	console.log(urlString);
-
 	$.ajax({
 		type: "GET",
 		dataType: "jsonp",
-		contentType: "application/json",
+		contentType: "application/jsonp",
 		url: urlString,
 		success: function(data) {
-			mineJSON(data);
+			console.log('success');
+			mineJSON(data);			
 		},
 		error: function(xhr, ajaxOptions, thrownError) {
 			console.log(xhr.status, thrownError);
@@ -56,15 +61,21 @@ function geocodeAddress(){
 }
 
 function mineJSON(json){
-
+	console.log('mineJSON');
 	try{
+		console.log('before xy in minejson');
 		x = json.result.addressMatches[0].coordinates.x;
-		y =	json.result.addressMatches[0].coordinates.y;			
+		y =	json.result.addressMatches[0].coordinates.y;	;
+
+		console.log('after xy');
 
 		completeAddress = street + " " + city + " " + state + " " + zip;
 		popupContent = "<center>" + completeAddress + "<p>" + y + ", " + x + "</p></center>";
 
-		L.marker([y, x]).addTo(map).bindPopup(popupContent);
+		var marker = L.marker([y,x]);	
+		markerList.push(marker);	
+		marker.addTo(map).bindPopup(popupContent);
+
 		map.setZoom(12);
 		map.setView(new L.LatLng(y,x));
 
@@ -72,7 +83,12 @@ function mineJSON(json){
 			$('#button_row').append('<input type="button" id="undo" class="geocodeButton" value="Undo">');
 			undoButtonCreated = true;
 			$('#undo').click(function(){
-				if (entryCount > 1){
+				
+				map.removeLayer(markerList[markerList.length - 1]);
+				markerList.pop();
+
+				if (entryCount > 1){					
+
 					csvList.pop()
 					$('#csv').empty();
 					$('#csv').append('<h2>CSV</h2>');
@@ -92,15 +108,14 @@ function mineJSON(json){
 						jsonList.pop();
 						undoButtonCreated = false;
 						csvJsonDivsCreated = false;
+
 					}
 
 					$('#json').empty();
 					$('#json').append('<h2>GEOJSON</h2>');
 					$('#json').append(jsonList);
 				}
-			})
-			
-			console.log(undoButtonCreated);
+			})			
 		}
 		
 		appendCSV(name, street, city, state, zip, x,y);			
@@ -134,9 +149,7 @@ function appendCSV(name, street, city, state, zip, x, y){
 	
 	csvList.push(csvString);
 	$('#csv').append(csvList);
-	//$('#json').append(csvList);
 
-	
 	appendJSON(x,y);
 		
 }

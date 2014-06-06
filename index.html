@@ -15,10 +15,15 @@
 
 		var csvList = ["ID, Street, City, State, Zip, X, Y<br />"];
 		var jsonList = ['{"type":"FeatureCollection","features": ['];
+		var markerList = [];
 		
 		var errorDivActive = false;
 		var undoButtonCreated = false;
 		var csvJsonDivsCreated = false;
+
+		var markerArray = {};
+		var coords = [-88.708664,43.191635];
+		var markerTest = L.marker([y,x]);
 
 		var entryCount = 1;	
 
@@ -63,8 +68,7 @@
 		  				<form class="form">
 		    				<div id="input_row"></div>
 		    				<div id="button_row">
-		    					<input type="button" id="geocodeButton" class="geocodeButton" value="Geocode!">	
-		    					<!-- <input type="button" id="undo" class="geocodeButton" value="Undo">	 -->
+		    					<input type="button" id="geocodeButton" class="geocodeButton" value="Geocode!">
 							</div>
 						</form>		   
 		  			</div>

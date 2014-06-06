@@ -14,11 +14,14 @@ To Do:
 	-change point styling  
 
 
-Current Version - 0.4
-*Undo button removes entries in both CSV and JSON
+Current Version - 0.4.1
+*Undo button removes markers on map
 
 
 UPDATES
+v0.4.0
+*Undo button removes entries in both CSV and JSON
+
 v0.3.1
 *fixed json/csv div styles to float:left
 
