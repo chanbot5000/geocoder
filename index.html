@@ -40,6 +40,15 @@
 				$('#geocodeError').remove();
 				errorDivActive = false;
 			});
+
+			$('#optionsButton').click(function(){
+				$('#map').append(
+					'<div id="optionsDiv"><b>Options:</b><br />' + 
+					'<input id="panZoomcheckbox" type="checkbox">Pan and Zoom to point' +
+					'</div>'
+					);
+				options();
+			});
 			
 			$(document).bind('keypress',function(e){
      			var p = e.which;	
@@ -52,35 +61,43 @@
     			 } 
     			}
  			}); 			
-		});	
+		});
+
+		function options(){
+			$('#panZoomcheckbox').click(function(){
+				var t = $('#panZoomcheckbox').val();
+				console.log(t);
+			});
+		}	
 
 
 
 	</script>
 
 </head>
-	<body>	
-		<div id="content">
-			<div id="topContent">
-				<div id="map"></div>
-				<div id="header">
-		  			<div id="headWrapper">
-		  				<form class="form">
-		    				<div id="input_row"></div>
-		    				<div id="button_row">
-		    					<input type="button" id="geocodeButton" class="geocodeButton" value="Geocode!">
-							</div>
-						</form>		   
-		  			</div>
-				</div>	
-				<div id="bottomContent">	
-				</div>	
-				<div id="footer">
-					<a style="text-decoration:none" href="http://giscollective.org/about/" target="_blank"> <id="about">About</a> | 
-					<a style="text-decoration:none" href="http://giscollective.org" target="_blank"> <id="gisc">GISC </a>
-				</div>
+<body>
+	<div id="content">
+		<div id="topContent">
+			<input type="button" id="optionsButton" value="Options" class="geocodeButton">
+			<div id="map"></div>
+			<div id="header">
+	  			<div id="headWrapper">
+					<form class="form">
+		   				<div id="input_row"></div>
+		    			<div id="button_row">
+		    				<input type="button" id="geocodeButton" class="geocodeButton" value="Geocode!">
+						</div>
+					</form>		   
+		  		</div>
+			</div>	
+			<div id="bottomContent">	
+			</div>	
+			<div id="footer">
+				<a style="text-decoration:none" href="http://giscollective.org/about/" target="_blank"> <id="about">About</a> | 
+				<a style="text-decoration:none" href="http://giscollective.org" target="_blank"> <id="gisc">GISC </a>
 			</div>
-			
-		</div>	
-	</body>
+		</div>			
+	</div>	
+
+</body>
 </html>

@@ -128,7 +128,7 @@ function mineJSON(json){
 	
 	}
 	catch(err){
-		$('#map').append('<div id="geocodeError">Whoops! We were unable to geocode that address, sorry about that!<p><input type="button" id="geocodeErrorDismiss" value="Dismiss"></p></div>');
+		$('#map').append('<div class="geocodeError" id="geocodeError">Whoops! We were unable to geocode that address, sorry about that!<p><input type="button" id="geocodeErrorDismiss" value="Dismiss"></p></div>');
 		errorDivActive = true;
 		
 		$('#geocodeErrorDismiss').click(function(){
