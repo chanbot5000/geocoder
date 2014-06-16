@@ -9,16 +9,10 @@ function addRow(){
 			
 			/*
 			//$('#input_row').append('<input type="text" id="name" value="Name">');	
-			$('#input_row').append('<input type="text" id="street" value="131 Riverlawn Ave">');	
-			$('#input_row').append('<input type="text" id="city" value="Watertown">');
+			$('#input_row').append('<input type="text" id="street" value="17 N Webster St">');	
+			$('#input_row').append('<input type="text" id="city" value="Madison">');
 			$('#input_row').append('<input type="text" id="state" value="WI">');
-			$('#input_row').append('<input type="text" id="zip" value="53094">');	*/
-/*
-			$('#input_row').append('<input type="text" id="street" value="100 N Garfield Ave">');	
-			$('#input_row').append('<input type="text" id="city" value="Pasadena">');
-			$('#input_row').append('<input type="text" id="state" value="CA">');
-			$('#input_row').append('<input type="text" id="zip" value="91109">');*/
-				
+			$('#input_row').append('<input type="text" id="zip" value="53703">');	*/				
 }
 
 function createMap(){
@@ -28,58 +22,60 @@ function createMap(){
 	//L.geoJson(address).addTo(map);
 }
 
-function geocodeAddress(){
+function buildAddress(){
+	
 	name = $("#name").val();
 	street = $("#street").val();
 	city = $("#city").val();
 	state = $("#state").val();
-	zip = $("#zip").val();
+	zip = $("#zip").val();	
 
 	var plus_street= street.replace(/ /gi,"+");
     var plus_city = city.replace(/ /gi, "+");
     var plus_state = state.replace(/ /gi,"+");
-    var plus_zip = zip.replace(/ /gi, "+");	    	
+    var plus_zip = zip.replace(/ /gi, "+");	     
 
 	//example format to pass to geocoder - http://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=4600+Silver+Hill+Rd%2C+Suitland%2C+MD+20746&benchmark=9&format=json
 	var urlString = "http://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=" + plus_street + "%2C+" + plus_city + "%2C+" + plus_state + "+" + plus_zip + "&benchmark=9&format=jsonp";		
 	console.log(urlString);
+	geocodeAddress(urlString);
+	
+}
+
+function geocodeAddress(address){
+	console.log(address);
 	$.ajax({
 		type: "GET",
 		dataType: "jsonp",
 		contentType: "application/jsonp",
-		url: urlString,
-		success: function(data) {
-			console.log('success');
+		url: address,		
+		success: function(data) {			
 			mineJSON(data);			
 		},
 		error: function(xhr, ajaxOptions, thrownError) {
 			console.log(xhr.status, thrownError);
-			console.log('error');
-
+			console.log('error');			
 		}
 	});
 }
 
 function mineJSON(json){
-	console.log('mineJSON');
-	try{
-		console.log('before xy in minejson');
+	
+	try{		
 		x = json.result.addressMatches[0].coordinates.x;
-		y =	json.result.addressMatches[0].coordinates.y;	;
+		y =	json.result.addressMatches[0].coordinates.y;	
+		matchedAddress = json.result.addressMatches[0].matchedAddress;			
 
-		console.log('after xy');
-
-		completeAddress = street + " " + city + " " + state + " " + zip;
-		popupContent = "<center>" + completeAddress + "<p>" + y + ", " + x + "</p></center>";
-
+		popupContent = "<center>" + matchedAddress + "<p>" + y + ", " + x + "</p></center>";
+				
 		var marker = L.marker([y,x]);	
 		markerList.push(marker);	
-		marker.addTo(map).bindPopup(popupContent);
-
-		//map.setZoom(12);
+		marker.addTo(map).bindPopup(popupContent);		
+		
 		map.setView(new L.LatLng(y,x), 12);
 
 		if (undoButtonCreated == false){
+			$('#inputFile').remove();
 			$('#button_row').append('<input type="button" id="undo" class="geocodeButton" value="Undo">');
 			undoButtonCreated = true;
 			$('#undo').click(function(){
@@ -106,6 +102,7 @@ function mineJSON(json){
 						$('#undo').remove();
 						$('#csv').remove()
 						$('#json').remove();
+
 						jsonList.pop();
 						undoButtonCreated = false;
 						csvJsonDivsCreated = false;
@@ -124,18 +121,42 @@ function mineJSON(json){
 			})			
 		}
 		
+		//console.log(matchedAddress);
+		matchedAddressSplit = matchedAddress.split(",");
+
+		street = matchedAddressSplit[0];
+		city = matchedAddressSplit[1];
+		state = matchedAddressSplit[2];
+		zip = matchedAddressSplit[3];
+		console.log(street,city,state,zip);
 		appendCSV(name, street, city, state, zip, x,y);			
 	
 	}
 	catch(err){
-		$('#map').append('<div class="geocodeError" id="geocodeError">Whoops! We were unable to geocode that address, sorry about that!<p><input type="button" id="geocodeErrorDismiss" value="Dismiss"></p></div>');
-		errorDivActive = true;
-		
-		$('#geocodeErrorDismiss').click(function(){
-			$('#geocodeError').remove();
-			errorDivActive = false;
-		});		
+		if (csvImport == false){
+			$('#map').append('<div class="geocodeError" id="geocodeError">Whoops! We were unable to geocode that address, sorry about that!<p><input type="button" id="geocodeErrorDismiss" value="Dismiss"></p></div>');
+			errorDivActive = true;
+			
+			$('#geocodeErrorDismiss').click(function(){
+				$('#geocodeError').remove();
+				errorDivActive = false;
+			});		
+		}else{			
+			var csvError = json.result.input.address.address;
+			csvGeocodeError(csvError);
+		}
 	}		
+}
+
+function csvGeocodeError(addressError){
+
+	if (errorCount == 0){
+		$('#bottomContent').append('<div id="csvErrorGeocoded"><h2>Geocode Error - Could Not Find Addresses:</h2></div>');
+	}
+
+	errorCount++;	
+	$('#csvErrorGeocoded').append(errorCount + " " + addressError);
+	$('#csvErrorGeocoded').append('<br />');
 }
 
 function appendCSV(name, street, city, state, zip, x, y){
@@ -162,7 +183,7 @@ function appendCSV(name, street, city, state, zip, x, y){
 
 function appendJSON(x,y){	
 	
-	var newJSONFeature = '{"type":"Feature","geometry":{"type":"Point","coordinates":[' + x + ', ' + y + ']},"properties":{"address":"'+ completeAddress + '"}}';
+	var newJSONFeature = '{"type":"Feature","geometry":{"type":"Point","coordinates":[' + x + ', ' + y + ']},"properties":{"address":"'+ matchedAddress + '"}}';
 
 	if (entryCount > 1){
 		jsonList.pop()
@@ -178,4 +199,111 @@ function appendJSON(x,y){
 	$('#json').append(jsonList);
 
 	entryCount += 1;
+}
+
+function readfile(f){	
+
+	var reader = new FileReader();
+	reader.readAsText(f);
+
+	reader.onload = function(){
+		csvImport = true;
+		var text = reader.result;
+		var s = text.split(/\r\n|\n/);				
+		
+		for (var i=0; i<s.length;i++){
+			var data = s[i].split(';');
+			var tarr = [];
+			for (var j=0;j<data.length;j++){
+				tarr.push(data[j]);
+			}
+			lines.push(tarr);			
+		}
+	}
+
+	reader.onloadend = function(){
+		readFileSuccess();
+	}
+}
+
+function readFileSuccess(){
+
+
+		console.log(lines.length-2);
+
+		var csvHeader = lines[0][0].split(","); //include space to split at comma space instead of just comma
+		var geocodeFields = ["Street","City","State","Zip"];			
+
+		$('#csvFields').append('Select the corresponding column for the geocoding process. This geocoder works best if it is provided the Street Address, City, State, and Zip code<br /><br />');
+
+		for (var i=0;i<geocodeFields.length;i++){
+			var selectTag = "<select id='upload" + geocodeFields[i] + "'>"; 
+
+			for (var j=0;j<csvHeader.length;j++){
+				var optionTag = "<option value='" + csvHeader[j] + "'>" + csvHeader[j] + "</option>";
+				selectTag = selectTag + optionTag;					
+			}
+
+			selectTag = selectTag + "</select><br />";
+			$('#csvFields').append(geocodeFields[i]);
+			$('#csvFields').append(selectTag);
+		}
+
+		$('#csvFields').append('<br />');
+		$('#cancelCSV').before('<input type="button" id="geocodeUploadedCSV" value="Geocode!">');
+
+		$('#geocodeUploadedCSV').click(function(){			
+
+			var uploadStreetField = $('#uploadStreet').val();
+			var uploadCityField = $('#uploadCity').val();
+			var uploadStateField = $('#uploadState').val();
+			var uploadZipField = $('#uploadZip').val();
+
+			var uploadStreetIndex = csvHeader.indexOf(uploadStreetField);
+			var uploadCityIndex = csvHeader.indexOf(uploadCityField);
+			var uploadStateIndex = csvHeader.indexOf(uploadStateField);
+			var uploadZipIndex = csvHeader.indexOf(uploadZipField);
+			
+			for (var mug=0;mug<lines.length;mug++){
+				var uploadLine = lines[mug];
+				var uploadLineList = uploadLine[0].split(",");					
+
+				if (uploadLineList == ""){
+
+				}else if(mug == 0){
+
+				}else{
+									
+				uploadStreet = uploadLineList[uploadStreetIndex];
+				uploadCity = uploadLineList[uploadCityIndex];
+				uploadState = uploadLineList[uploadStateIndex];
+				uploadZip = uploadLineList[uploadZipIndex];
+
+				var valueList = [uploadStreet,uploadCity,uploadState,uploadZip];
+				var stringRemovedList = [];
+				var newValueList = [];
+
+				for (var gum=0;gum<valueList.length;gum++){
+
+					if (valueList[gum].indexOf(' ') == 0){
+						valueList[gum] = valueList[gum].replace(' ','',1);
+						stringRemovedList.push(valueList[gum]);
+					}else{							
+						stringRemovedList.push(valueList[gum]);
+					}
+
+					newValueList.push(valueList[gum].replace(/ /gi,"+"));
+						
+				}	
+				
+				console.log(entryCount);
+				var upUrlString = "http://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=" + newValueList[0] + "%2C+" + newValueList[1] + "%2C+" + newValueList[2] + "+" + newValueList[3] + "&benchmark=9&format=jsonp";						
+
+				geocodeAddress(upUrlString);				
+				$('#inputFileDiv').remove();
+
+				}
+			}												
+		});
+				
 }

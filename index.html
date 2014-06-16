@@ -6,16 +6,22 @@
 	<script src="http://code.jquery.com/jquery-latest.min.js " ></script>
 
 	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
-	<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+	<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>	
 
 	<script type="text/javascript">
 
-		var map;
-		var name, street, city, state, zip, x, y, csvString;	
 
+		var map;
+		var name, street, city, state, zip, x, y, csvString;
+
+		var uploadStreet, uploadCity, uploadState, uploadZip;		
+
+		var lines = [];
+		
 		var csvList = ["ID, Street, City, State, Zip, X, Y<br />"];
 		var jsonList = ['{"type":"FeatureCollection","features": ['];
 		var markerList = [];
+		var matchedAddress, matchedAddressSplit;
 		
 		var errorDivActive = false;
 		var undoButtonCreated = false;
@@ -27,28 +33,38 @@
 
 		var entryCount = 1;	
 
+		var inputrad;
+
+		var csvImport = false;
+		errorCount = 0;
+
 		$(document).ready(function(){
 
 			addRow();
 			createMap();
 
 			$('#geocodeButton').click(function(){
-				geocodeAddress();					
+				csvImport = false;				
+				buildAddress();					
 			});
 
 			$('#geocodeErrorDismiss').click(function(){
 				$('#geocodeError').remove();
 				errorDivActive = false;
-			});
+			});			
 
-			$('#optionsButton').click(function(){
+			$('#upload').click(function(){
 				$('#map').append(
-					'<div id="optionsDiv"><b>Options:</b><br />' + 
-					'<input id="panZoomcheckbox" type="checkbox">Pan and Zoom to point' +
-					'</div>'
-					);
-				options();
-			});
+					'<div id="inputFileDiv" class="uploadCSV">' +					
+					'<center><b>Upload a CSV file</b></center><br /><br />' +
+					'<div id="csvFields"></div>' +
+					'<center><input type="file" id="file" onchange="readfile(this.files[0])" accept=".csv"><br /><br />' +					
+					'<input type="button" value="Cancel" id="cancelCSV"></center></div>');
+
+				$('#cancelCSV').click(function(){
+					$('#inputFileDiv').remove();
+				});	
+			});			
 			
 			$(document).bind('keypress',function(e){
      			var p = e.which;	
@@ -57,20 +73,14 @@
     			 	$('#geocodeError').remove();
     			 	errorDivActive = false;
     			  }else if (errorDivActive == false){
-         			geocodeAddress();
+    			  	csvImport = false;
+         			buildAddress();
     			 } 
     			}
  			}); 			
 		});
 
-		function options(){
-			$('#panZoomcheckbox').click(function(){
-				var t = $('#panZoomcheckbox').val();
-				console.log(t);
-			});
-		}	
-
-
+	
 
 	</script>
 
@@ -78,7 +88,7 @@
 <body>
 	<div id="content">
 		<div id="topContent">
-			<input type="button" id="optionsButton" value="Options" class="geocodeButton">
+			<!--<input type="button" id="optionsButton" value="Options" class="geocodeButton"> -->
 			<div id="map"></div>
 			<div id="header">
 	  			<div id="headWrapper">
@@ -86,6 +96,7 @@
 		   				<div id="input_row"></div>
 		    			<div id="button_row">
 		    				<input type="button" id="geocodeButton" class="geocodeButton" value="Geocode!">
+		    				<input type="button" id="upload" class="geocodeButton" value="Upload">
 						</div>
 					</form>		   
 		  		</div>

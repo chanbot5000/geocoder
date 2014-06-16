@@ -45,7 +45,7 @@ input:focus, textarea:focus{
 }
 
 .geocodeButton{
-	width: auto;
+	width: 100px;
 	padding: 9px, 15px;
 	background: #b5d0d0;
 	border: 1px;
@@ -106,15 +106,15 @@ input:focus, textarea:focus{
 
 }
 
-#optionsDiv{
-	width: 200px;
+.uploadCSV{
+	width: 30%;
 	height: auto;
 	background-color: #FFF;
 	position: relative;
 	margin-left: auto;
 	margin-right: auto;
 	z-index: 9999;
-	top: 50%;
+	top: 25%;
 	border: 5px;
 	border-color: #000000;
 	font: normal 10px/100% Verdana, sans-serif;
@@ -130,6 +130,15 @@ input:focus, textarea:focus{
 
     background: -webkit-gradient(linear, left top, left 25, from(#FFFFFF), color-stop(4%, #EEEEEE), to(#FFFFFF));
     background: -moz-linear-gradient(top, #FFFFFF, #EEEEEE 1px, #FFFFFF 25px); 
+}
+
+#csvFields{
+	width: 60%;	
+	border: 5px;
+	border-color: #000;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 
@@ -170,6 +179,25 @@ input:focus, textarea:focus{
 	
 	display: inline-block;
 	margin-left: 5px;
+
+	-webkit-border-radius: 5px;
+    -moz-border-radius: 5px; 
+
+    box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
+    -moz-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
+    -webkit-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
+}
+
+#csvErrorGeocoded{
+	top: 0px;
+	background-color: #EEEFFF;
+	width: auto;
+	font: normal 12px/100% Verdana, sans-serif;
+	padding: 20px;
+	margin-top: 10px;
+	display: inline-block;
+	margin-right: auto;
+	margin-left: auto;
 
 	-webkit-border-radius: 5px;
     -moz-border-radius: 5px; 
