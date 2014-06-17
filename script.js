@@ -228,9 +228,6 @@ function readfile(f){
 
 function readFileSuccess(){
 
-
-		console.log(lines.length-2);
-
 		var csvHeader = lines[0][0].split(","); //include space to split at comma space instead of just comma
 		var geocodeFields = ["Street","City","State","Zip"];			
 
