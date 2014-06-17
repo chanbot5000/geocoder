@@ -5,7 +5,7 @@ function addRow(){
 			$('#input_row').append('<input type="text" id="street" placeholder="Street">');	
 			$('#input_row').append('<input type="text" id="city" placeholder="City">');
 			$('#input_row').append('<input type="text" id="state" placeholder="State">');
-			$('#input_row').append('<input type="text" id="zip" placeholder="Zip Code">');						
+			$('#input_row').append('<input type="text" id="zip" placeholder="Zip Code">');				
 			
 			/*
 			//$('#input_row').append('<input type="text" id="name" value="Name">');	
@@ -61,18 +61,25 @@ function geocodeAddress(address){
 
 function mineJSON(json){
 	
-	try{		
+	try{				
 		x = json.result.addressMatches[0].coordinates.x;
 		y =	json.result.addressMatches[0].coordinates.y;	
-		matchedAddress = json.result.addressMatches[0].matchedAddress;			
+		matchedAddress = json.result.addressMatches[0].matchedAddress;
 
 		popupContent = "<center>" + matchedAddress + "<p>" + y + ", " + x + "</p></center>";
-				
 		var marker = L.marker([y,x]);	
-		markerList.push(marker);	
+		markerList.push(marker);			
 		marker.addTo(map).bindPopup(popupContent);		
-		
-		map.setView(new L.LatLng(y,x), 12);
+				
+		if (entryCount == lines.length-1){
+			alert('in if');
+			markerGroup = new L.featureGroup(markerList);
+			map.fitBounds(markerGroup.getBounds());
+		}		
+
+		if (csvImport == false){
+			map.setView(new L.LatLng(y,x), 12);
+		}	
 
 		if (undoButtonCreated == false){
 			$('#inputFile').remove();
@@ -122,7 +129,7 @@ function mineJSON(json){
 		}
 		
 		//console.log(matchedAddress);
-		matchedAddressSplit = matchedAddress.split(",");
+		matchedAddressSplit = matchedAddress.split(",");		
 
 		street = matchedAddressSplit[0];
 		city = matchedAddressSplit[1];
@@ -202,7 +209,7 @@ function appendJSON(x,y){
 }
 
 function readfile(f){	
-
+	lines = [];
 	var reader = new FileReader();
 	reader.readAsText(f);
 

@@ -7,6 +7,11 @@ Use this website to geocode points based on addresses. The website uses the US C
 
 To Do:
 *Export results as .csv, .json files
+*Fix styling bugs
+	-Geocode error div needs work
+*Add 'Geocoding...' to application
+	-need to run asynchronously? just a div in middle that closes when geocoding ends?	
+*Zoom to layer extent when batch coding a CSV (possible with leaflet?)
 *Add options panel, to include:
 	-toggle center & zoom on geocoded point when coded
 	-configuring custom zoom level for geocoding, if center & zoom is selected
@@ -14,13 +19,17 @@ To Do:
 	-change point styling  
 
 
-Current Version - 0.5
-*Upload CSV and geocoding records working
-*Need to break it to find bugs, but records geocode if properly formatted CSV is uploaded
+Current Version - 0.5.1
+*bug fixes 
+
 
 
 
 UPDATES
+v0.5.0
+*Upload CSV and geocoding records working
+*Need to break it to find bugs, but records geocode if properly formatted CSV is uploaded
+
 v0.4.2
 *Zoom to most recent point when Undo clicked, zoom to full extent when no points exist
 
