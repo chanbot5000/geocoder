@@ -4,9 +4,8 @@
 	<link rel="stylesheet" href="style.css" />
 	<script src="script.js" type="text/javascript"></script>
 	<script src="http://code.jquery.com/jquery-latest.min.js " ></script>
-
 	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
-	<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>	
+	<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
 
 	<script type="text/javascript">
 
@@ -14,17 +13,17 @@
 		var map;
 		var name, street, city, state, zip, x, y, csvString;
 
-		var uploadStreet, uploadCity, uploadState, uploadZip;		
+		var uploadStreet, uploadCity, uploadState, uploadZip;
 
 		var lines = [];
-		
+
 		var csvList = ["ID, Street, City, State, Zip, X, Y<br />"];
 		var jsonList = ['{"type":"FeatureCollection","features": ['];
 
 		var markerList = [];
 		var markerGroup;
 		var matchedAddress, matchedAddressSplit;
-		
+
 		var errorDivActive = false;
 		var undoButtonCreated = false;
 		var csvJsonDivsCreated = false;
@@ -33,7 +32,7 @@
 		var coords = [-88.708664,43.191635];
 		var markerTest = L.marker([y,x]);
 
-		var entryCount = 1;	
+		var entryCount = 1;
 
 		var inputrad;
 
@@ -46,30 +45,30 @@
 			createMap();
 
 			$('#geocodeButton').click(function(){
-				csvImport = false;				
-				buildAddress();					
+				csvImport = false;
+				buildAddress();
 			});
 
 			$('#geocodeErrorDismiss').click(function(){
 				$('#geocodeError').remove();
 				errorDivActive = false;
-			});			
+			});
 
 			$('#upload').click(function(){
 				$('#map').append(
-					'<div id="inputFileDiv" class="uploadCSV">' +					
+					'<div id="inputFileDiv" class="uploadCSV">' +
 					'<center><b>Upload a CSV file</b></center><br /><br />' +
 					'<div id="csvFields"></div>' +
-					'<center><input type="file" id="file" onchange="readfile(this.files[0])" accept=".csv"><br /><br />' +					
+					'<center><input type="file" id="file" onchange="readfile(this.files[0])" accept=".csv"><br /><br />' +
 					'<input type="button" value="Cancel" id="cancelCSV"></center></div>');
 
 				$('#cancelCSV').click(function(){
 					$('#inputFileDiv').remove();
-				});	
-			});			
-			
+				});
+			});
+
 			$(document).bind('keypress',function(e){
-     			var p = e.which;	
+     			var p = e.which;
      			if(p==13) {
      			  if (errorDivActive == true){
     			 	$('#geocodeError').remove();
@@ -77,12 +76,12 @@
     			  }else if (errorDivActive == false){
     			  	csvImport = false;
          			buildAddress();
-    			 } 
+    			 }
     			}
- 			}); 			
+ 			});
 		});
 
-	
+
 
 	</script>
 
@@ -90,7 +89,7 @@
 <body>
 	<div id="content">
 		<div id="topContent">
-			<!--<input type="button" id="optionsButton" value="Options" class="geocodeButton"> -->			
+			<!--<input type="button" id="optionsButton" value="Options" class="geocodeButton"> -->
 			<div id="map"></div>
 			<div id="header">
 	  			<div id="headWrapper">
@@ -100,18 +99,18 @@
 		    				<input type="button" id="geocodeButton" class="geocodeButton" value="Geocode!">
 		    				<input type="button" id="upload" class="geocodeButton" value="Upload">
 						</div>
-					</form>		   
+					</form>
 		  		</div>
-			</div>	
-			<div id="bottomContent">	
-			</div>	
+			</div>
+			<div id="bottomContent">
+			</div>
 			<div id="footer">
-				<a style="text-decoration:none" href="http://giscollective.org/about/" target="_blank"> <id="about">About</a> | 
-				<a style="text-decoration:none" href="http://giscollective.org" target="_blank"> <id="gisc">GISC </a>							
+				<a style="text-decoration:none" href="http://giscollective.org/about/" target="_blank"> <id="about">About</a> |
+				<a style="text-decoration:none" href="http://giscollective.org" target="_blank"> <id="gisc">GISC </a>
 			</div>
 
-		</div>			
-	</div>	
+		</div>
+	</div>
 
 </body>
 </html>

@@ -16,10 +16,10 @@ function addRow(){
 }
 
 function createMap(){
-	map = L.map('map').setView([39.5,-98.35],5);
-
+	map = L.map('map').setView([39.5,-98.35],10);
+	L.GeoIP.centerMapOnPosition(map);
 	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
-	//L.geoJson(address).addTo(map);
+	
 }
 
 function buildAddress(){
