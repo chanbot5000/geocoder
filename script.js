@@ -54,7 +54,8 @@ function geocodeAddress(address){
 		},
 		error: function(xhr, ajaxOptions, thrownError) {
 			console.log(xhr.status, thrownError);
-			console.log('error');			
+			console.log('error');
+			alert('request timed out: ' + address);			
 		}
 	});
 }
